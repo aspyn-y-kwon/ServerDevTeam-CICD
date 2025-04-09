@@ -24,13 +24,10 @@ jobs:
           sudo apt-get install -y subversion
 
       - name: Checkout Code from SVN with Authentication
-        env: 
-          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
-          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
         run: |
           svn checkout https://tr00058.infraware.net/svn/PolarisCloud/Server/projects/PolarisCloudService/trunk \
-          --username ${{ env.SVN_USERNAME }} \
-          --password ${{ env.SVN_PASSWORD }} \
+          --username ${{ secrets.SVN_USERNAME }} \
+          --password ${{ secrets.SVN_PASSWORD }} \
           ./source-code       
 
       - name: Set up JDK 8
