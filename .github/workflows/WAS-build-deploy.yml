@@ -42,7 +42,7 @@ jobs:
         run: mvn clean package --file ./source-code/pom.xml
 
       - name: Compress Build Artifact
-        run: tar -cvzf build.tar.gz target/*.war
+        run: tar -cvzf build.tar.gz ./source-code/target/*.war
 
       - name: Upload to S3
         env:
@@ -61,7 +61,7 @@ jobs:
       - name: Deploy with AWS CodeDeploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_CODEDEPLOY_APP : github-actions
           AWS_DEPLOY_GROUP : Deploy_EC2
           AWS_S3_BUCKET : tb-ca-github-actions
