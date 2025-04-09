@@ -25,7 +25,7 @@ jobs:
 
       - name: Checkout Code from SVN with Authentication
         run: |
-          svn checkout https://tr00058.infraware.net/svn/PolarisCloud/Server/projects/PolarisCloudService/trunk \
+          svn checkout https://tr00058.infraware.net/svn/PolarisCloud/Server/projects/PolarisCloudService/trunk/ \
           --username ${{ secrets.SVN_USERNAME }} \
           --password ${{ secrets.SVN_PASSWORD }} \
           ./source-code       
