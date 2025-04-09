@@ -1,0 +1,66 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Build and Deploy to AWS EC2
+
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+  build:
+    name: Build Project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+
+      - name: Set up Maven 
+        run: sudo apt-get install -y maven
+
+      - name: Build with Maven (WAR)
+        run: mvn clean package
+
+      - name: Compress Build Artifact
+        run: tar -cvzf build.tar.gz target/*.war
+
+      - name: Upload to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run:
+          aws s3 cp build.tar.gz s3://${{ secrets.S3_BUCKET }}/build.tar.gz
+
+
+  deploy:
+    name: Deploy to EC2 via CodeDeploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy with AWS CodeDeploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETS_ACCESS_KEY }}
+          AWS_CODEDEPLOY_APP : github-actions
+          AWS_DEPLOY_GROUP : Deploy_EC2
+          AWS_S3_BUCKET : tb-ca-github-actions
+        run: |
+          aws deploy create-deployment \
+          --application-name ${{ AWS_CODEDEPLOY_APP }} \
+          --deployment-group-name ${{ AWS_DEPLOY_GROUP }} \
+          --s3-location bucket=${{ AWS_S3_BUCKET }},bundleType=tgz,key=build.tar.gz \
+          --file-exists-behavior OVERWRITE
+            
+
+        
