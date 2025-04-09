@@ -18,8 +18,20 @@ jobs:
     name: Build Project
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - name: Set up SVN Client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y subversion
+
+      - name: Checkout Code from SVN with Authentication
+        env: 
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        run: |
+          svn checkout https://tr00058.infraware.net/svn/PolarisCloud/Server/projects/PolarisCloudService/trunk \
+          --username ${{ env.SVN_USERNAME }} \
+          --password ${{ env.SVN_PASSWORD }} \
+          ./source-code       
 
       - name: Set up JDK 8
         uses: actions/setup-java@v4
@@ -30,7 +42,7 @@ jobs:
         run: sudo apt-get install -y maven
 
       - name: Build with Maven (WAR)
-        run: mvn clean package
+        run: mvn clean package --file ./source-code/pom.xml
 
       - name: Compress Build Artifact
         run: tar -cvzf build.tar.gz target/*.war
@@ -39,8 +51,9 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_S3_BUCKET : tb-ca-github-actions
         run:
-          aws s3 cp build.tar.gz s3://${{ secrets.S3_BUCKET }}/build.tar.gz
+          aws s3 cp build.tar.gz s3://${{ env.AWS_S3_BUCKET }}/build.tar.gz
 
 
   deploy:
@@ -57,9 +70,9 @@ jobs:
           AWS_S3_BUCKET : tb-ca-github-actions
         run: |
           aws deploy create-deployment \
-          --application-name ${{ AWS_CODEDEPLOY_APP }} \
-          --deployment-group-name ${{ AWS_DEPLOY_GROUP }} \
-          --s3-location bucket=${{ AWS_S3_BUCKET }},bundleType=tgz,key=build.tar.gz \
+          --application-name ${{ env.AWS_CODEDEPLOY_APP }} \
+          --deployment-group-name ${{ env.AWS_DEPLOY_GROUP }} \
+          --s3-location bucket=${{ env.AWS_S3_BUCKET }},bundleType=tgz,key=build.tar.gz \
           --file-exists-behavior OVERWRITE
             
 
