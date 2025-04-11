@@ -18,17 +18,23 @@ jobs:
     name: Build Project
     runs-on: ubuntu-latest
     steps:
-      - name: Set up SVN Client
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y subversion
+      - name: Checkout Code
+        uses: actions/checkout@4
+        with: 
+          repository: aspyn-y-kwon/ServerDevTeam-WAS
+          ref: main
+          
+      # - name: Set up SVN Client
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y subversion
 
-      - name: Checkout Code from SVN with Authentication
-        run: |
-          svn checkout https://tr00058.infraware.net/svn/PolarisCloud/Server/projects/PolarisCloudService/trunk/ \
-          --username ${{ secrets.SVN_USERNAME }} \
-          --password ${{ secrets.SVN_PASSWORD }} \
-          ./source-code       
+      # - name: Checkout Code from SVN with Authentication
+      #   run: |
+      #     svn checkout https://tr00058.infraware.net/svn/PolarisCloud/Server/projects/PolarisCloudService/trunk/ \
+      #     --username ${{ secrets.SVN_USERNAME }} \
+      #     --password ${{ secrets.SVN_PASSWORD }} \
+      #     ./source-code       
 
       - name: Set up JDK 8
         uses: actions/setup-java@v4
