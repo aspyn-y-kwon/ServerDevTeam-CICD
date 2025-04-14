@@ -19,7 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@3
+        # uses: actions/checkout@3
+        uses: rohmanngmbh/action-checkout-repo@v1.3.5
         with: 
           repository: aspyn-y-kwon/ServerDevTeam-WAS
           ref: main
