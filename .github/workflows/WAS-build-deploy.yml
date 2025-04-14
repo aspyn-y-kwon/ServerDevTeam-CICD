@@ -15,6 +15,7 @@ jobs:
         with:
           repository: aspyn-y-kwon/ServerDevTeam-WAS
           ref: main
+          token: ${{ secrets.PAT }} 
           path: ./source-code
           
       # - name: Set up SVN Client
