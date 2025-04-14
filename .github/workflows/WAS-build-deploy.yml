@@ -37,7 +37,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Set up Maven 
-        run: sudo apt-get install -y maven
+        run: sudo apt-get install -y maven3.6.3
 
       - name: Build with Maven (WAR)
         run: mvn clean package --file ./source-code/pom.xml
