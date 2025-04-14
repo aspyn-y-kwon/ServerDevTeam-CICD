@@ -10,14 +10,9 @@ jobs:
     name: Build Project
     runs-on: ubuntu-latest
     steps:
-      # 현재 레포지토리 체크 아웃
       - name: Checkout Code
-        uses: actions/checkout@4
-
-      # 소스 코드 레포지토리 체크아웃
-      - name: Checkout WAS Code
-        uses: actions/checkout@v4
-        with: 
+        uses: actions/checkout@4.2.2
+        with:
           repository: aspyn-y-kwon/ServerDevTeam-WAS
           ref: main
           path: ./source-code
