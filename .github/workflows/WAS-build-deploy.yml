@@ -2,14 +2,6 @@ name: Build and Deploy to AWS EC2
 
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        description: '수동 배포'
-        # required: true
-        # default: 'production'
-        # type: choice
-        # options:
-          # - production
   push:
     branches: 
       - main
