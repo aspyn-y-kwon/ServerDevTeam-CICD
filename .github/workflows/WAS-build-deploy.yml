@@ -70,7 +70,8 @@ jobs:
   deploy:
     name: Deploy to EC2 via CodeDeploy
     needs: build
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Deploy with AWS CodeDeploy
         env:
