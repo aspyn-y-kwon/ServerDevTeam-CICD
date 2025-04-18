@@ -13,7 +13,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout Code
-        uses: actions/checkout@4.2.2
+        uses: actions/checkout@v4.2.2
         with:
           repository: aspyn-y-kwon/ServerDevTeam-WAS
           ref: main
