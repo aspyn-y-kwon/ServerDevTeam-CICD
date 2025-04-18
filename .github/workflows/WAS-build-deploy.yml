@@ -37,6 +37,7 @@ jobs:
         with:
           java-version: '8'
           distribution: 'temurin'
+          cache: 'maven'
 
       # - name: Set up Maven 
       #   run: sudo apt-get install -y maven
@@ -44,10 +45,15 @@ jobs:
       - name: Set up Maven 3.6.3
         run: |
           wget https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
-          tar -xvzf apache-maven-3.6.3-bin.tar.gz
-          sudo mv apache-maven-3.6.3 /opt/maven
-          echo "export MAVEN_HOME=/opt/maven" >> $GITHUB_ENV
-          echo "export PATH=\$MAVEN_HOME/bin:\$PATH" >> $GITHUB_ENV
+          # sudo tar -xvzf apache-maven-3.6.3-bin.tar.gz
+          # sudo mv apache-maven-3.6.3 /opt/maven
+          # echo "export MAVEN_HOME=/opt/maven" >> $GITHUB_ENV
+          # echo "export PATH=\$MAVEN_HOME/bin:\$PATH" >> $GITHUB_ENV
+          sudo tar -xvzf apache-maven-3.6.3-bin.tar.gz -C /opt/
+          sudo ln -s /opt/apache-maven-3.6.3 /opt/maven
+          echo "export M2_HOME=/opt/maven" >> ~/.bashrc
+          echo "export PATH=\$M2_HOME/bin:\$PATH" >> ~/.bashrc
+          source ~/.bashrc
 
       - name: Verify Maven Installation
         run: mvn -v
