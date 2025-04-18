@@ -84,10 +84,15 @@ jobs:
       - name: Compress Build Artifact
         run: tar -cvzf build.tar.gz ./source-code/target/*.war
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-1
+
       - name: Upload to S3
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_S3_BUCKET : tb-ca-github-actions
         run:
           aws s3 cp build.tar.gz s3://${{ env.AWS_S3_BUCKET }}/build.tar.gz
