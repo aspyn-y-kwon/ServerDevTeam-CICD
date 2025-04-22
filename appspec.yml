@@ -6,6 +6,10 @@ files:
     destination: /tmp
     overwrite: yes
 hooks:
+  BeforeInstall:
+    - runas: root
+      location: scripts/permission.sh
+      
   AfterInstall:
     - location: scripts/deploy_root.sh
       timeout: 120
