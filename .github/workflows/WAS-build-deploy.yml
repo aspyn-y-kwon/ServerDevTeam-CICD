@@ -91,9 +91,9 @@ jobs:
 
       - name: Copy appspec.yml and scripts to source-code directory
         run: |
-          cp ./infra/appspec.yml ./source-code/
           mkdir -p ./source-code/scripts
-          cp ./scripts/deploy_root.sh ./source-code/scripts/
+          cp ./infra/appspec.yml ./source-code/
+          cp ./infra/scripts/*.sh ./source-code/scripts/
 
       - name: Compress Build Artifact
         run: tar -cvzf build.tar.gz ./source-code/target/*.war ./source-code/appspec.yml ./source-code/scripts/
