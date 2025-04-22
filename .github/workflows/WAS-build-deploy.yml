@@ -94,6 +94,7 @@ jobs:
           mkdir -p ./source-code/scripts
           cp ./infra/appspec.yml ./source-code/
           cp ./infra/scripts/*.sh ./source-code/scripts/
+          chmod +x ./source-code/scripts/*.sh
 
       - name: Compress Build Artifact
         run: tar -cvzf build.tar.gz ./source-code/target/*.war ./source-code/appspec.yml ./source-code/scripts/
