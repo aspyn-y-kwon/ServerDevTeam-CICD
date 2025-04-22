@@ -87,7 +87,8 @@ jobs:
         run: mvn clean package --file ./source-code/pom.xml
 
       - name: Run JUnit Tests
-        run: mvn test
+        run: |
+          mvn test --file ./source-code/pom.xml
 
       - name: Copy appspec.yml and scripts to source-code directory
         run: |
