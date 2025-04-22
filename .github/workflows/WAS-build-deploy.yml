@@ -51,8 +51,11 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      # - name: Set up Maven 
-      #   run: sudo apt-get install -y maven
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Run JUnit Tests
+        run: mvn test
 
       - name: Set up Maven 3.6.3
         run: |
