@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 
 files:
-  - source: source-code/target/PolarisCloudService.war
+  - source: target/PolarisCloudService.war
     destination: /tmp
     overwrite: yes
 hooks:      
