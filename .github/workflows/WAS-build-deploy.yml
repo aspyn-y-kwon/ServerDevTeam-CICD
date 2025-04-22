@@ -51,12 +51,6 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Build with Maven
-        run: mvn clean package
-
-      - name: Run JUnit Tests
-        run: mvn test
-
       - name: Set up Maven 3.6.3
         run: |
           # wget https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
@@ -80,7 +74,7 @@ jobs:
           
           # Clean up
           rm maven.tar.gz
-          
+
 
       - name: Verify Maven Installation
         # run: mvn -v
@@ -91,6 +85,9 @@ jobs:
 
       - name: Build with Maven (WAR)
         run: mvn clean package --file ./source-code/pom.xml
+
+      - name: Run JUnit Tests
+        run: mvn test
 
       - name: Copy appspec.yml and scripts to source-code directory
         run: |
