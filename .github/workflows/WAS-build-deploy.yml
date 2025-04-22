@@ -36,6 +36,14 @@ jobs:
       #     --password ${{ secrets.SVN_PASSWORD }} \
       #     ./source-code       
 
+      - name: Checkout Infra Repo
+        uses: actions/checkout@v4
+        with:
+          repository: aspyn-y-kwon/ServerDevTeam-CICD
+          ref: main
+          token: ${{ secrets.PAT }} 
+          path: ./infra
+
       - name: Set up JDK 8
         uses: actions/setup-java@v4
         with:
@@ -83,9 +91,9 @@ jobs:
 
       - name: Copy appspec.yml and scripts to source-code directory
         run: |
-          cp ./appspec.yml ./source-code/
+          cp ./infra/appspec.yml ./source-code/
           mkdir -p ./source-code/scripts
-          cp ./scripts/deploy_root.sh ./source-code/scripts/
+          cp ./scripts/*.sh ./source-code/scripts/
 
       - name: Compress Build Artifact
         run: tar -cvzf build.tar.gz ./source-code/target/*.war ./source-code/appspec.yml ./source-code/scripts/
