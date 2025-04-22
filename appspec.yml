@@ -5,9 +5,8 @@ files:
   - source: source-code/target/PolarisCloudService.war
     destination: /tmp
     overwrite: yes
-
-  hooks:
-    AfterInstall:
-      - location: scripts/deploy_root.sh
-        timeout: 120
-        runas: root
+hooks:
+  AfterInstall:
+    - location: scripts/deploy_root.sh
+      timeout: 120
+      runas: root
