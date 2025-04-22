@@ -97,7 +97,7 @@ jobs:
           chmod +x ./source-code/scripts/*.sh
 
       - name: Compress Build Artifact
-        run: tar -cvzf build.tar.gz ./source-code/target/*.war ./source-code/appspec.yml ./source-code/scripts/
+        run: tar -cvzf build.tar.gz -C . source-code
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
