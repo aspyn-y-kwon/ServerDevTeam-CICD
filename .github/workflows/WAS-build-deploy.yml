@@ -83,7 +83,7 @@ jobs:
           # SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_HOST_URL: "http://52.9.196.222:9000"
         run: |
-          mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2.0:sonar \
+          mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.4.0:sonar \
             -Dsonar.projectKey=github-actions-test-project \
             -Dsonar.host.url=${{ env.SONAR_HOST_URL }} \
             -Dsonar.login=${{ env.SONAR_TOKEN }} \
@@ -91,7 +91,7 @@ jobs:
             -Dsonar.coverage.jacoco.xmlReportPaths=./source-code/target/site/jacoco/jacoco.xml \
             -Dsonar.java.source=1.8 \
             -Dsonar.sourceEncoding=UTF-8 \
-            -Dsonar.verbose=true \
+            -X \ # 디버그 로그 활성화
             --file ./source-code/pom.xml
 
       - name: Build with Maven (WAR)
