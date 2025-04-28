@@ -89,6 +89,8 @@ jobs:
             -Dsonar.login=${{ env.SONAR_TOKEN }} \
             -Dsonar.java.binaries=./source-code/target/classes \
             -Dsonar.coverage.jacoco.xmlReportPaths=./source-code/target/site/jacoco/jacoco.xml \
+            -Dsonar.java.source=1.8 \
+            -Dsonar.java.target=1.8 \
             --file ./source-code/pom.xml
 
       - name: Build with Maven (WAR)
