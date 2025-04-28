@@ -81,7 +81,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           # SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          SONAR_HOST_URL: ${{ http://52.9.196.222:9000 }}
+          SONAR_HOST_URL: http://52.9.196.222:9000
         run: |
           mvn sonar:sonar \
             -Dsonar.projectKey=github-actions-test-project \
