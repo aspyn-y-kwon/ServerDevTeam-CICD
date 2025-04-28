@@ -91,7 +91,7 @@ jobs:
             -Dsonar.coverage.jacoco.xmlReportPaths=./source-code/target/site/jacoco/jacoco.xml \
             -Dsonar.java.source=1.8 \
             -Dsonar.sourceEncoding=UTF-8 \
-            -X \ # 디버그 로그 활성화
+            -X \
             --file ./source-code/pom.xml
 
       - name: Build with Maven (WAR)
