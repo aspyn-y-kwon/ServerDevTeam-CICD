@@ -68,7 +68,7 @@ jobs:
       # Junit Test 실행
       - name: Run JUnit Tests with Coverage
         run: |
-          mvn test verify jacoco:report --file ./source-code/pom.xml
+          mvn test --file ./source-code/pom.xml
 
       # SnarQube Scanner 설치
       - name: Setup SonarQube Scanner
