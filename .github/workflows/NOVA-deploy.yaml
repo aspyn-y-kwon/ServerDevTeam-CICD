@@ -1,10 +1,6 @@
 name: NOVA Deploy
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - nova_main
   workflow_call:
     inputs:
       S3_BUCKET_NAME:
