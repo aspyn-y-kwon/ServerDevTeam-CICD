@@ -44,7 +44,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build
-        run: CI=false yan run build:staging
+        run: CI=false yarn run build:staging
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
