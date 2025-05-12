@@ -74,12 +74,11 @@ jobs:
 
       - name: Upload to S3
         run: |
-          aws s3 sync ./build s3://${{ inputs.S3_BUCKET_NAME }}/${{ inputs.S3_OBJECT_PATH }}
+          aws s3 sync ${{ inputs.SOURCE_PATH }} s3://${{ inputs.S3_BUCKET_NAME }}/${{ inputs.S3_OBJECT_PATH }}
 
       - name: Compress build folder
         run: |
-          mv NOVA/appspec.yml .
-          tar czf /tmp/build.tar.gz -C ${{ inputs.SOURCE_PATH }} .
+          tar czf /tmp/build.tar.gz .
 
       - name: Upload artifact to S3
         run: |
