@@ -103,7 +103,7 @@ jobs:
          aws deploy create-deployment \
          --application-name ${{ env.AWS_CODEDEPLOY_APP }} \
          --deployment-group-name ${{ env.AWS_DEPLOY_GROUP }} \
-         --s3-location bucket=${{ env.AWS_S3_BUCKET }},key=${{ inputs.S3_BINARY_PATH }},bundleType=${{ inputs.BUNBLE_TYPE }} \
+         --s3-location bucket=${{ env.AWS_S3_BUCKET }},key=${{ inputs.S3_BINARY_PATH }},bundleType=${{ inputs.BUNDLE_TYPE }} \
          --file-exists-behavior OVERWRITE \
          --region ${{ env.AWS_REGION }}
       
