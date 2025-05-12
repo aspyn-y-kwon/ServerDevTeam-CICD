@@ -89,7 +89,7 @@ jobs:
          aws deploy create-deployment \
          --application-name ${{ env.AWS_CODEDEPLOY_APP }} \
          --deployment-group-name ${{ env.AWS_DEPLOY_GROUP }} \
-         --s3-location bucket=${{ env.AWS_S3_BUCKET }},bundleType=tgz,key=build.tar.gz \
+         --s3-location bucket=${{ env.AWS_S3_BUCKET }}/${{ inputs.S3_OBJECT_PATH }} \
          --file-exists-behavior OVERWRITE \
          --region ${{ env.AWS_REGION }}
       
