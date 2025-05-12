@@ -3,12 +3,16 @@ name: NOVA Deploy
 on:
   workflow_call:
     inputs:
-      S3_BUCKET_NAME:
-        required: true
-        type: string
       AWS_REGION:
         required: true
         type: string
+      S3_BUCKET_NAME:
+        required: true
+        type: string
+      S3_OBJECT_PATH:
+        required: true
+        type: string
+      
 
 
 jobs: 
@@ -55,7 +59,7 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync ./build s3://${{ inputs.S3_BUCKET_NAME }}
+          aws s3 sync ./build s3://${{ inputs.S3_BUCKET_NAME }}/${{ inputs.S3_OBJECT_PATH }}
 
           
       
