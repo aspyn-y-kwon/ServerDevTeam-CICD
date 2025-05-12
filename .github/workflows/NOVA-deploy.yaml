@@ -80,14 +80,16 @@ jobs:
        env:
          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETS_ACCESS_KEY }}
-         AWS_CODEDEPLOY_APP : ${{ inputs.AWS_CODEDEPLOY_APP }}
-         AWS_DEPLOY_GROUP : ${{ inputs.AWS_DEPLOY_GROUP }}
-         AWS_S3_BUCKET : ${{ inputs.S3_BUCKET_NAME }}
+         AWS_CODEDEPLOY_APP: ${{ inputs.AWS_CODEDEPLOY_APP }}
+         AWS_DEPLOY_GROUP: ${{ inputs.AWS_DEPLOY_GROUP }}
+         AWS_S3_BUCKET: ${{ inputs.S3_BUCKET_NAME }}
+         AWS_REGION: ${{ inputs.AWS_REGION }}
 
        run: |
          aws deploy create-deployment \
          --application-name ${{ env.AWS_CODEDEPLOY_APP }} \
          --deployment-group-name ${{ env.AWS_DEPLOY_GROUP }} \
          --s3-location bucket=${{ env.AWS_S3_BUCKET }},bundleType=tgz,key=build.tar.gz \
-         --file-exists-behavior OVERWRITE    
+         --file-exists-behavior OVERWRITE   
+         --region ${{ env.AWS_REGION }}
       
