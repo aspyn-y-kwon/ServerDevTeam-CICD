@@ -12,6 +12,12 @@ on:
       S3_OBJECT_PATH:
         required: true
         type: string
+      S3_BINARY_PATH:
+        required: true
+        type: string
+      BUNDLE_TYPE:
+        required: true
+        type: string
       SOURCE_PATH:
         required: true
         type: string
@@ -20,7 +26,7 @@ on:
         type: string
       AWS_DEPLOY_GROUP:
         required: true
-        type: string       
+        type: string
       
 
 
@@ -70,6 +76,14 @@ jobs:
         run: |
           aws s3 sync ./build s3://${{ inputs.S3_BUCKET_NAME }}/${{ inputs.S3_OBJECT_PATH }}
 
+      - name: Compress build folder
+        run: |
+          tar czf build.tar.gz -C ${{ inputs.SOURCE_PATH }} .
+
+      - name: Upload artifact to S3
+        run: |
+          aws s3 cp NOVA.tar.gz s3://${{ inputs.S3_BUCKET_NAME }}/${{ inputs.S3_BINARY_PATH }}
+
   deploy:
     name: Deploy to EC2 via CodeDeploy
     needs: build
@@ -89,7 +103,7 @@ jobs:
          aws deploy create-deployment \
          --application-name ${{ env.AWS_CODEDEPLOY_APP }} \
          --deployment-group-name ${{ env.AWS_DEPLOY_GROUP }} \
-         --s3-location bucket=${{ env.AWS_S3_BUCKET }}/${{ inputs.S3_OBJECT_PATH }} \
+         --s3-location bucket=${{ env.AWS_S3_BUCKET }},key=${{ inputs.S3_BINARY_PATH }},bundleType=${{ inputs.BUNBLE_TYPE }} \
          --file-exists-behavior OVERWRITE \
          --region ${{ env.AWS_REGION }}
       
