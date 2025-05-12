@@ -78,7 +78,7 @@ jobs:
 
       - name: Compress build folder
         run: |
-          tar czf build.tar.gz -C ${{ inputs.SOURCE_PATH }} .
+          tar czf /tmp/build.tar.gz -C ${{ inputs.SOURCE_PATH }} .
 
       - name: Upload artifact to S3
         run: |
