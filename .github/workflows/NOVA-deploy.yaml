@@ -78,6 +78,7 @@ jobs:
 
       - name: Compress build folder
         run: |
+          mv NOVA/appspec.yml .
           tar czf /tmp/build.tar.gz -C ${{ inputs.SOURCE_PATH }} .
 
       - name: Upload artifact to S3
