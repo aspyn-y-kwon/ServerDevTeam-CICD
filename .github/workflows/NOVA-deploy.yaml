@@ -12,6 +12,15 @@ on:
       S3_OBJECT_PATH:
         required: true
         type: string
+      SOURCE_PATH:
+        required: true
+        type: string
+      AWS_CODEDEPLOY_APP:
+        required: true
+        type: string
+      AWS_DEPLOY_GROUP:
+        required: true
+        type: string       
       
 
 
