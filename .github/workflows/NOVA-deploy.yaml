@@ -82,7 +82,7 @@ jobs:
 
       - name: Upload artifact to S3
         run: |
-          aws s3 cp NOVA.tar.gz s3://${{ inputs.S3_BUCKET_NAME }}/${{ inputs.S3_BINARY_PATH }}
+          aws s3 cp /tmp/build.tar.gz s3://${{ inputs.S3_BUCKET_NAME }}/${{ inputs.S3_BINARY_PATH }}
 
   deploy:
     name: Deploy to EC2 via CodeDeploy
