@@ -18,9 +18,6 @@ on:
       BUNDLE_TYPE:
         required: true
         type: string
-      SOURCE_PATH:
-        required: true
-        type: string
       AWS_CODEDEPLOY_APP:
         required: true
         type: string
