@@ -1,0 +1,124 @@
+name: PolarisBatchHeavyService Deploy
+on: 
+  workflow_call:
+    secrets:
+      AWS_ACCESS_KEY:
+        required: true
+      AWS_PRIVATE_KEY:
+        required: true
+    inputs:
+      AWS_REGION:
+        required: true
+        type: string
+      S3_DEPLOY_BUCKET:
+        required: true
+        type: string
+      S3_BINARY_BUCKET:
+        required: true
+        type: string
+      S3_BINARY_PATH:
+        required: true
+        type: string
+      BINARY_BUNDLE_TYPE:
+        required: true
+        type: string
+      AWS_CODEDEPLOY_APP:
+        required: true
+        type: string
+      AWS_DEPLOY_GROUP:
+        required: true
+        type: string
+
+jobs:
+  build: 
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+          cache: 'maven'
+
+    
+      - name: Set up Maven 3.6.3
+        run: |
+          MAVEN_VERSION=3.6.3
+          MAVEN_DOWNLOAD_URL=https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz
+            
+          # Download Maven
+          curl -L ${MAVEN_DOWNLOAD_URL} -o maven.tar.gz
+            
+          # Extract Maven
+          sudo mkdir -p /opt/maven
+          sudo tar -xzf maven.tar.gz -C /opt/maven --strip-components=1
+            
+          # Set environment variables
+          echo "M2_HOME=/opt/maven" >> $GITHUB_ENV
+          echo "PATH=/opt/maven/bin:$PATH" >> $GITHUB_ENV
+            
+          # Clean up
+          rm maven.tar.gz
+
+      - name: Verify Maven Installation
+        run: |
+          echo "M2_HOME: $M2_HOME"
+          echo "PATH: $PATH"
+          mvn -v
+
+      # Junit Test 실행
+      - name: Run JUnit Tests with Coverage
+        run: |
+          mvn test --file ./pom.xml
+
+
+      - name: Build with Maven (WAR)
+        run: mvn clean package --file ./pom.xml
+
+
+      - name: Copy appspec.yml and scripts to source-code directory
+        run: |
+          mkdir -p ./scripts
+          chmod +x ./scripts/*.sh
+
+      - name: Compress Build Artifact
+        run: tar -cvzf build.tar.gz -C . source-code
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRETS_ACCESS_KEY }}
+          aws-region: us-west-1
+
+      - name: Upload to S3
+        env:
+          AWS_S3_BUCKET: pcloud-testbed-provisional-data
+        run: |
+          aws s3 cp build.tar.gz s3://${{ inputs.S3_BINARY_BUCKET }}/build.tar.gz
+
+
+  deploy:
+    name: Deploy to EC2 via CodeDeploy
+    needs: build
+    # runs-on: ubuntu-latest
+    runs-on: self-hosted
+    steps:
+      - name: Deploy with AWS CodeDeploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETS_ACCESS_KEY }}
+
+          AWS_S3_BUCKET : tb-ca-github-actions
+        run: |
+          aws deploy create-deployment \
+          --application-name ${{ inputs.AWS_CODEDEPLOY_APP }} \
+          --deployment-group-name ${{ inputs.AWS_DEPLOY_GROUP }} \
+          --s3-location bucket=${{ inputs.S3_BINARY_BUCKET }},bundleType=${{ input.BINARY_BUNDLE_TYPE }},key=${{ input.S3_BINARY_PATH }} \
+          --file-exists-behavior OVERWRITE
+    
+  
+    
