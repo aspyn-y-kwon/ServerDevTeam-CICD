@@ -13,9 +13,6 @@ on:
       AWS_REGION:
         required: true
         type: string
-      S3_DEPLOY_BUCKET:
-        required: true
-        type: string
       S3_BINARY_BUCKET:
         required: true
         type: string
