@@ -85,7 +85,12 @@ jobs:
           chmod +x ./scripts/*.sh
 
       - name: Compress Build Artifact
-        run: tar -cvzf build-${{ inputs.GITHUB_SHA }}.tar.gz .
+        run: |
+          cp -r . /tmp/build-copy
+          cd /tmp/buid-copy
+          tar -cvzf build-${{ inputs.GITHUB_SHA }}.tar.gz .
+          cd -
+          mv /tmp/build-${{ inputs.GITHUB_SHA }}.tar.gz ./
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
